@@ -21,7 +21,6 @@ public class ControlerGameOverScreen : MonoBehaviour
     [SerializeField] private GameObject ButtonBackHome;
     [SerializeField] private GameObject NewRecord;
     [SerializeField] private GameObject PlacarPontos;
-    [SerializeField] private GameObject NovosJogosEmBreve;
     [Header("Music")]
     [SerializeField] private AudioSource musicSource;
     [Header("SFX")]
@@ -57,7 +56,9 @@ public class ControlerGameOverScreen : MonoBehaviour
         while(countPoints < totalPoints - sumPerWhile) {
             countPoints += sumPerWhile;
             textPoints.text = countPoints.ToString("D6");
-            audioSFX.PlayOneShot(SFXPoints);
+            if (!audioSFX.isPlaying) {
+                audioSFX.PlayOneShot(SFXPoints);
+            }
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -94,9 +95,6 @@ public class ControlerGameOverScreen : MonoBehaviour
             textPlacar.text = textPlacar.text + aux;
         }
 
-
-
-        NovosJogosEmBreve.SetActive(true);
         CliqueParaVoltar.SetActive(true);
         ButtonBackHome.SetActive(true);
     }

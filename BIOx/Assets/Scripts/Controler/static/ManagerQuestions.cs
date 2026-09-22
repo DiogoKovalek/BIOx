@@ -6,47 +6,38 @@ public static class ManagerQuestions {
     private class Question {
         private string question;
         private string correct;
-        private string[] incorrects = new string[3];
+        private string incorrect;
         public Question(string question,
                         string correct,
-                        string incorrects1,
-                        string incorrects2,
-                        string incorrects3) {
+                        string incorrects) {
             this.question = question;
             this.correct = correct;
-            this.incorrects[0] = incorrects1;
-            this.incorrects[1] = incorrects2;
-            this.incorrects[2] = incorrects3;
+            this.incorrect = incorrects;
         }
 
         public bool IsCorrect(string res) {
             return res == correct;
         }
         public string ToString() {
-            return question + ";;" + correct + ";;" + incorrects[0] + ";;" + incorrects[1] + ";;" + incorrects[2];
+            return question + ";;" + correct + ";;" + incorrect;
         }
     }
     private static Question[] listQuestions = {
-        new Question("Qual é o numero 1",
-                    "1",
-                    "2",
-                    "3",
-                    "4"),
-        new Question("Qual é o numero 2",
-                    "2",
-                    "1",
-                    "3",
-                    "4"),
-        new Question("Qual é o numero 3",
-                    "3",
-                    "1",
-                    "2",
-                    "4"),
-        new Question("Qual é o numero 4",
-                    "4",
-                    "2",
-                    "3",
-                    "1")
+        new Question("Os biodigestores só podem ser utilizados em unidades produtivas de médio e grande porte?",
+                    "Falso",
+                    "Verdadeiro"),
+        new Question("Em que processo biológico os biodigestores estão envolvidos?",
+                    "Digestão anaeróbica",
+                    "Fotossíntese"),
+        new Question("Quais são os principais tipos de resíduos que podem ser utilizados em biodigestores?",
+                    "Estercos e restos de alimentos",
+                    "Papel e plástico"),
+        new Question("Como a temperatura afeta o desempenho de um biodigestor?",
+                    "Altas temperaturas aumentam a atividade microbiana",
+                    "A temperatura não influencia"),
+        new Question("Quais são os benefícios ambientais associados ao uso de biodigestores?",
+                    "Redução de emissões de metano e reciclagem de nutrientes",
+                    "Aumento da poluição atmosférica"),
     };
     private static int questionsQuant = listQuestions.Length;
     private static int[] orderQuestion = new int[questionsQuant];

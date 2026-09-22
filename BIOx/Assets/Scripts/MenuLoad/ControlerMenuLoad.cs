@@ -6,8 +6,7 @@ using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.UI;
 
-public class ControlerMenuLoad : MonoBehaviour
-{
+public class ControlerMenuLoad : MonoBehaviour {
 
     /*
     ================================================================
@@ -17,7 +16,7 @@ public class ControlerMenuLoad : MonoBehaviour
     -> PresButtonNextLevel() Funcao para botao de troca de fase
     ================================================================
     */
-    
+
     [SerializeField] private GameObject LevelComplete;
     [SerializeField] private GameObject CliqueParaContinuar;
     [SerializeField] private GameObject PointsText;
@@ -30,8 +29,8 @@ public class ControlerMenuLoad : MonoBehaviour
     [SerializeField] private GameObject[] Options;
     [SerializeField] private GameObject CorrectPoints;
     private bool isInQuestionScreen;
-    private Color32 colorButtonCorrect = new Color32(41,140,15,255);
-    private Color32 colorButtonIncorrect = new Color32(140,16,20,255);
+    private Color32 colorButtonCorrect = new Color32(41, 140, 15, 255);
+    private Color32 colorButtonIncorrect = new Color32(140, 16, 20, 255);
     [Header("Music")]
     [SerializeField] private AudioSource musicSource;
 
@@ -45,10 +44,9 @@ public class ControlerMenuLoad : MonoBehaviour
 
     private int totalPoints = ManagerAtributes.points;
     private int pointForAdd = ManagerAtributes.cachePoints;
-    private int pointBonusForAdd= ManagerAtributes.cacheBonusPoint;
+    private int pointBonusForAdd = ManagerAtributes.cacheBonusPoint;
     private int countPoints;
-    void Start()
-    {
+    void Start() {
         textPointsText = PointsText.GetComponent<TextMeshProUGUI>();
         textPointsBonusText = PointsTextBonus.GetComponent<TextMeshProUGUI>();
         StartCoroutine(viewQuestionari());
@@ -63,11 +61,11 @@ public class ControlerMenuLoad : MonoBehaviour
 
         string[] question = ManagerQuestions.SortRandomQuest().Split(";;");
         List<string> optionsString = new List<string>();
-        for(int i = 1; i < question.Length; i++) optionsString.Add(question[i]);
+        for (int i = 1; i < question.Length; i++) optionsString.Add(question[i]);
 
         TextQuestion.GetComponent<TextMeshProUGUI>().text = question[0];
-        for(int i = 0; i < Options.Length; i++) {
-            if(optionsString.Count == 0) {
+        for (int i = 0; i < Options.Length; i++) {
+            if (optionsString.Count == 0) {
                 Options[i].GetComponentInChildren<TextMeshProUGUI>().text = "ERRO";
                 continue;
             }
@@ -76,7 +74,7 @@ public class ControlerMenuLoad : MonoBehaviour
             optionsString.RemoveAt(index);
         }
 
-        while (isInQuestionScreen){
+        while (isInQuestionScreen) {
             yield return null;
         }
         yield return new WaitForSeconds(3f);
@@ -94,16 +92,18 @@ public class ControlerMenuLoad : MonoBehaviour
         countPoints = totalPoints;
         textPointsText.text = countPoints.ToString("D6");
         yield return new WaitForSeconds(0.5f);
-        
+
         int sumPoints = totalPoints + pointForAdd;
-        int sumPerWhile = pointForAdd/loops == 0 ? 1 : pointForAdd/loops;
-        while(countPoints < sumPoints - sumPerWhile) {
+        int sumPerWhile = pointForAdd / loops == 0 ? 1 : pointForAdd / loops;
+        while (countPoints < sumPoints - sumPerWhile) {
             countPoints += sumPerWhile;
             textPointsText.text = countPoints.ToString("D6");
-            audioSFX.PlayOneShot(SFXPoints);
+            if (!audioSFX.isPlaying) {
+                audioSFX.PlayOneShot(SFXPoints);
+            }
             yield return new WaitForSeconds(0.01f);
         }
-        
+
         // Como pointsForAdd e inteiro ele prescisa ser atualizado para o valor original, mesma coisa para bonus
         countPoints = sumPoints;
         textPointsText.text = countPoints.ToString("D6");
@@ -115,11 +115,13 @@ public class ControlerMenuLoad : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             sumPoints += pointBonusForAdd;
-            sumPerWhile = pointBonusForAdd/loops == 0 ? 1 : pointBonusForAdd/loops; // verificacao caso o bonus seja menor que loops
+            sumPerWhile = pointBonusForAdd / loops == 0 ? 1 : pointBonusForAdd / loops; // verificacao caso o bonus seja menor que loops
             while (countPoints < sumPoints - sumPerWhile) {
                 countPoints += sumPerWhile;
                 textPointsText.text = countPoints.ToString("D6");
-                audioSFX.PlayOneShot(SFXPoints);
+                if (!audioSFX.isPlaying) {
+                    audioSFX.PlayOneShot(SFXPoints);
+                }
                 yield return new WaitForSeconds(0.01f);
             }
 
@@ -148,7 +150,7 @@ public class ControlerMenuLoad : MonoBehaviour
         }
         else {
             Options[num - 1].GetComponent<Image>().color = colorButtonIncorrect;
-            for(int i = 0; i < Options.Length; i++) {
+            for (int i = 0; i < Options.Length; i++) {
                 if (ManagerQuestions.CheckeedIfCorrect(Options[i].GetComponentInChildren<TextMeshProUGUI>().text)) {
                     Options[i].GetComponent<Image>().color = colorButtonCorrect;
                     break;
